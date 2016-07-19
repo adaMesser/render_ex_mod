@@ -1,0 +1,4 @@
+name = Render example module
+description = Module with render array
+core = 7.x
+package = EDU

@@ -1,0 +1,98 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function render_ex_mod_theme($existing, $type, $theme, $path) {
+  $items = array();
+
+  $items['rend_content'] = array(
+    'render element' => 'rend_list',
+    'path' => drupal_get_path('module', 'render_ex_mod') . '/templates',
+    'template' => 'render-ex-mod-content',
+  );
+
+  $items['rend_message'] =array(
+    'variables' => array('message' => NULL),
+    'path' => drupal_get_path('module', 'render_ex_mod') . '/templates' ,
+    'template' => 'render-ex-mod-message',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function render_ex_mod_block_info() {
+  $blocks['render_ex_mod'] = array(
+    'info' => t('Rend BLOCK'),
+  );
+
+  return $blocks;
+}
+/**
+ * @return array
+ */
+function render_ex_mod_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'render_ex_mod':
+      $block['subject'] = 'Rend BLOCK';
+
+      $message_first = t('First message');
+    $message_second = t('Second message');
+
+    $content = array(
+      '#theme' => 'rend_content',
+      'mess_first' => array(
+        '#message' => $message_first,
+        '#theme' => 'rend_message',
+        '#attributes' => array(
+          'class' => 'render-ex-mod-first',
+        ),
+      ),
+
+      'mess_second' => array(
+        '#message' => $message_second,
+        '#theme' => 'rend_message',
+        '#attributes' => array(
+          'class' => 'render-ex-mod-second',
+
+        ),
+      ),
+      '#attached' => array(
+        'css' => array(
+          drupal_get_path('module', 'render_ex_mod') . '/css/styles.css',
+        ),
+      ),
+      '#attributes' => array(
+        'class' => array(
+          'render-ex-mod-content-wrapper',
+        ),
+      ),
+    );
+    $block['content'] = $content;
+
+    break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function render_ex_mod_preprocess_rend_content(&$variables) {
+  if (!empty($variables['rend_list']['#attributes']['class'])) {
+    $variables['classes_array'] = array_merge($variables['classes_array'], $variables['rend_list']['#attributes']['class']);
+  }
+
+  if (!empty($variables['rend_list']['#attributes']['id'])) {
+    $variables['attributes_array']['id'] = $variables['rend_list']['#attributes']['id'];
+  }
+}
+function render_ex_mod_preprocess_rend_message(&$variables) {
+  $variables['classes_array'][] = 'rend_list-' . 'id-' . $variables['id'];
+  $variables['classes_array'][] = 'rend_list-' . $variables['zebra'];
+}
