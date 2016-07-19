@@ -49,18 +49,11 @@ function render_ex_mod_block_view($delta = '') {
       'mess_first' => array(
         '#message' => $message_first,
         '#theme' => 'rend_message',
-        '#attributes' => array(
-          'class' => 'render-ex-mod-first',
-        ),
       ),
 
       'mess_second' => array(
         '#message' => $message_second,
         '#theme' => 'rend_message',
-        '#attributes' => array(
-          'class' => 'render-ex-mod-second',
-
-        ),
       ),
       '#attached' => array(
         'css' => array(
